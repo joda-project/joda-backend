@@ -4,11 +4,10 @@ Joda Backend URL Configuration
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from joda.helpers import DefaultRouter
-from joda_core.router import router as core
+from joda.helpers import JodaRouter
 
-router = DefaultRouter(trailing_slash=False)
-router.extend(core)
+router = JodaRouter(trailing_slash=False)
+router.add_features()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

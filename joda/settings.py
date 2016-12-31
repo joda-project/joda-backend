@@ -12,6 +12,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 ALLOWED_HOSTS = []
 
+# Joda features
+JODA_FEATURES = []
 
 # Application definition
 INSTALLED_APPS = [
