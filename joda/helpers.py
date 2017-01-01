@@ -12,7 +12,7 @@ from joda_core.router import router as core
 def about_view(_):
     out = {
         'version': get_version(),
-        'features': []
+        'features': {}
     }
 
     for feature in settings.JODA_FEATURES:
@@ -20,11 +20,9 @@ def about_view(_):
             feature = 'joda_' + feature
 
         module = importlib.import_module(feature)
-        out['features'].append({
-            feature: {
-                'version': module.version
-            }
-        })
+        out['features'][feature] = {
+            'version': module.version
+        }
 
     return response.Response(out)
 
