@@ -24,6 +24,9 @@ class File(models.Model):
     def __str__(self):
         return self.name
 
+    class JSONAPIMeta:
+        resource_name = "files"
+
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
@@ -31,12 +34,18 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
+    class JSONAPIMeta:
+        resource_name = "authors"
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
+
+    class JSONAPIMeta:
+        resource_name = "tags"
 
 
 class Content(PolymorphicModel):
@@ -51,3 +60,6 @@ class Content(PolymorphicModel):
 
     def __str__(self):
         return self.title
+
+    class JSONAPIMeta:
+        resource_name = "contents"
