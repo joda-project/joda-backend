@@ -11,11 +11,12 @@ class File(models.Model):
         JPEG = ChoiceItem()
 
     name = models.CharField(max_length=255)
-    md5 = models.CharField(max_length=32, blank=True)
+    md5 = models.CharField(max_length=32)
     file_type = models.CharField(max_length=5,
                                  choices=FileType.choices,
                                  validators=[FileType.validator])
     added = models.DateTimeField(auto_now_add=True)
+    public = models.BooleanField(default=False)
     user = models.ForeignKey(
         User, null=True, on_delete=models.SET_NULL, related_name='+')
     label = models.CharField(max_length=255, blank=True)
@@ -43,7 +44,6 @@ class Content(PolymorphicModel):
     files = models.ManyToManyField(File)
     added = models.DateTimeField(auto_now_add=True)
     validated = models.BooleanField(default=False)
-    listed = models.BooleanField(default=False)
     public = models.BooleanField(default=False)
     user = models.ForeignKey(
         User, null=True, on_delete=models.SET_NULL, related_name='+')
