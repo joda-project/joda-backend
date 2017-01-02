@@ -52,7 +52,7 @@ class Content(PolymorphicModel):
     title = models.CharField(max_length=255)
     files = models.ManyToManyField(File)
     added = models.DateTimeField(auto_now_add=True)
-    validated = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
     public = models.BooleanField(default=False)
     user = models.ForeignKey(
         User, null=True, on_delete=models.SET_NULL, related_name='+')

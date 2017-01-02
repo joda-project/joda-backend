@@ -15,7 +15,7 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        fields = ('name', 'md5', 'file_type', 'added', 'user', 'label')
+        fields = ('name', 'md5', 'file_type', 'added', 'user', 'label', 'content_set')
 
 
 class AuthorSerializer(serializers.ModelSerializer):
