@@ -9,6 +9,7 @@ class File(models.Model):
     class FileType(DjangoChoices):
         PDF = ChoiceItem()
         JPEG = ChoiceItem()
+        PNG = ChoiceItem()
 
     name = models.CharField(max_length=255)
     md5 = models.CharField(max_length=32)

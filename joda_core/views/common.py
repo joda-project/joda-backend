@@ -1,11 +1,9 @@
 from django.http import Http404
-from django.db.models import Count
 from rest_framework import filters, permissions, viewsets
 
-from joda_core.filters import FilesFilterSet
-from joda_core.models import Author, Content, File, Tag
+from joda_core.models import Author, Content, Tag
 from joda_core.pagination import DefaultPagination
-from joda_core.serializers import AuthorSerializer, ContentSerializer, FileSerializer, TagSerializer, UserSerializer
+from joda_core.serializers import AuthorSerializer, ContentSerializer, TagSerializer, UserSerializer
 
 
 class ContentsViewSet(viewsets.ModelViewSet):
@@ -15,14 +13,6 @@ class ContentsViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter)
     filter_fields = ('tags', 'verified')
     search_fields = ('title',)
-
-
-class FilesViewSet(viewsets.ModelViewSet):
-    queryset = File.objects.annotate(Count('content')).order_by('name')
-    serializer_class = FileSerializer
-    pagination_class = DefaultPagination
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter)
-    filter_class = FilesFilterSet
 
 
 class AuthorsViewSet(viewsets.ModelViewSet):

@@ -1,4 +1,4 @@
-from rest_framework import pagination
+from rest_framework_json_api import pagination
 
 
 class DefaultPagination(pagination.PageNumberPagination):
