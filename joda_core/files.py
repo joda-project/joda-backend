@@ -3,7 +3,14 @@ import os
 import sys
 import time
 
+from django.utils.lru_cache import lru_cache
+
 from rest_framework import exceptions, status
+
+
+@lru_cache()
+def upload_path():
+    return os.environ['FILES_UPLOAD_PATH']
 
 
 class FileIOException(exceptions.APIException):
@@ -24,7 +31,7 @@ def get_unique_name(name):
     if not extension:
         extension = '.pdf'
 
-    path = os.environ['FILES_UPLOAD_PATH']
+    path = upload_path()
     name = sanitize_name(prefix + extension.lower())
     fullname = os.path.join(path, name)
     index = 1
@@ -36,7 +43,7 @@ def get_unique_name(name):
 
 
 def get_md5(name):
-    path = os.environ['FILES_UPLOAD_PATH']
+    path = upload_path()
     hash_md5 = hashlib.md5()
     try:
         with open(os.path.join(path, name), "rb") as f:
@@ -50,7 +57,7 @@ def get_md5(name):
 
 def handle_uploaded_file(file):
     name = get_unique_name(file.name)
-    path = os.environ['FILES_UPLOAD_PATH']
+    path = upload_path()
     try:
         with open(os.path.join(path, name), 'wb+') as destination:
             for chunk in file.chunks():

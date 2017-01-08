@@ -25,6 +25,14 @@ class File(models.Model):
     def __str__(self):
         return self.name
 
+    def content_type(self):
+        if self.file_type == File.FileType.PDF:
+            return 'application/pdf'
+        elif self.file_type == File.FileType.PNG:
+            return 'image/png'
+        elif self.file_type == File.FileType.JPEG:
+            return 'image/jpeg'
+
     class JSONAPIMeta:
         resource_name = "files"
 
