@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from djchoices import DjangoChoices, ChoiceItem
 from polymorphic.models import PolymorphicModel
@@ -69,6 +70,9 @@ class Content(PolymorphicModel):
 
     def __str__(self):
         return self.title
+
+    def get_content_type(self):
+        return ContentType.objects.get_for_id(self.polymorphic_ctype_id)
 
     class JSONAPIMeta:
         resource_name = "contents"

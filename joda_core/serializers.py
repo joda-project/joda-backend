@@ -5,6 +5,8 @@ from joda_core.models import Author, Content, File, Tag
 
 
 class ContentSerializer(serializers.ModelSerializer):
+    content_type = serializers.CharField(
+        source='get_content_type', read_only=True)
 
     class Meta:
         model = Content
@@ -15,7 +17,8 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        fields = ('name', 'md5', 'file_type', 'added', 'user', 'label', 'content_set')
+        fields = ('name', 'md5', 'file_type', 'added',
+                  'user', 'label', 'content_set')
 
 
 class AuthorSerializer(serializers.ModelSerializer):
