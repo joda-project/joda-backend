@@ -55,6 +55,12 @@ def get_md5(name):
     return hash_md5.hexdigest()
 
 
+def get_size(name):
+    path = upload_path()
+    statinfo = os.stat(os.path.join(path, name))
+    return statinfo.st_size
+
+
 def handle_uploaded_file(file):
     name = get_unique_name(file.name)
     path = upload_path()
@@ -67,4 +73,5 @@ def handle_uploaded_file(file):
         raise FileIOException
 
     md5 = get_md5(name)
-    return name, md5
+    size = get_size(name)
+    return name, md5, size

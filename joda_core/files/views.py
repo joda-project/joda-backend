@@ -4,13 +4,14 @@ import os
 from django.conf import settings
 from django.db.models import Count
 from django.http import HttpResponse
-from rest_framework import filters, response, status, viewsets
+from rest_framework import filters, permissions, response, status, viewsets
 
-from joda_core import files
-from joda_core.filters import FilesFilterSet
-from joda_core.models import File
 from joda_core.pagination import DefaultPagination
-from joda_core.serializers import FileSerializer
+from joda_core.permissions import IsPublic
+from joda_core.files import utils
+from joda_core.files.filters import FilesFilterSet
+from joda_core.files.models import File
+from joda_core.files.serializers import FileSerializer
 
 
 def get_file_view(request, file_id):
@@ -41,7 +42,7 @@ def get_file_view(request, file_id):
         return HttpResponse(status=401)
 
     # If file is missing, this is an error, but we should still return 404
-    file_name = os.path.join(files.upload_path(), file_info.name)
+    file_name = os.path.join(utils.upload_path(), file_info.name)
     if not file_name or not os.path.exists(file_name):
         return HttpResponse(status=404)
 
@@ -59,33 +60,41 @@ def get_file_view(request, file_id):
 
 
 class FilesViewSet(viewsets.ModelViewSet):
-    queryset = File.objects.annotate(Count('content')).order_by('pk')
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsPublic)
     serializer_class = FileSerializer
     pagination_class = DefaultPagination
     filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter)
     filter_class = FilesFilterSet
+    search_fields = ('name', 'label')
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return File.objects.filter(public=True).annotate(Count('content')).order_by('-pk')
+        return File.objects.annotate(Count('content')).order_by('-pk')
 
     def create_child_resource(self, resource_type, file):
         if resource_type == 'null':
             return
 
-        if resource_type not in settings.JODA_FEATURES and 'joda_' + resource_type not in settings.JODA_FEATURES:
+        if resource_type not in settings.JODA_FEATURES and \
+            'joda_' + resource_type not in settings.JODA_FEATURES:
             return
 
         if not 'joda_' in resource_type:
             resource_type = 'joda_' + resource_type
 
         module = importlib.import_module('.helpers', resource_type)
-        module.create_from_upload(file)
+        module.create_from_upload(file, self.request.user)
 
     def create(self, request, *args, **kwargs):
         result = []
         for f, t in zip(self.request.FILES.getlist('file[]'), self.request.data.get('file_types').split(',')):
-            file_name, file_md5 = files.handle_uploaded_file(f)
+            file_name, file_md5, file_size = utils.handle_uploaded_file(f)
             result.append({
                 'name': file_name,
                 'file_type': t,
                 'md5': file_md5,
+                'size': file_size,
                 'user': {
                     'type': 'User',
                     'id': self.request.user.id

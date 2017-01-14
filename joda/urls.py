@@ -5,7 +5,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 from joda.helpers import JodaRouter, about_view
-from joda_core.views.files import get_file_view
+from joda_core.files.views import get_file_view
 
 router = JodaRouter(trailing_slash=False)
 router.add_features()

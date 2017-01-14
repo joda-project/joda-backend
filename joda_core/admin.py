@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from joda_core.models import Author, File, Tag
+from joda_core.models import Author, Tag
+from joda_core.files.models import File
 
 
 class CommonCoreAdmin(admin.ModelAdmin):
