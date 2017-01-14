@@ -1,18 +1,8 @@
 from django.http import Http404
-from rest_framework import filters, permissions, viewsets
+from rest_framework import permissions, viewsets
 
-from joda_core.models import Author, Content, Tag
-from joda_core.pagination import DefaultPagination
-from joda_core.serializers import AuthorSerializer, ContentSerializer, TagSerializer, UserSerializer
-
-
-class ContentsViewSet(viewsets.ModelViewSet):
-    queryset = Content.objects.all().order_by('title')
-    serializer_class = ContentSerializer
-    pagination_class = DefaultPagination
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter)
-    filter_fields = ('tags', 'verified')
-    search_fields = ('title',)
+from joda_core.models import Author, Tag
+from joda_core.serializers import AuthorSerializer, TagSerializer, UserSerializer
 
 
 class AuthorsViewSet(viewsets.ModelViewSet):

@@ -12,7 +12,7 @@ class FileProtectedSerializer(serializers.ModelSerializer):
 
 class FileSerializer(serializers.ModelSerializer):
     included_serializers = {
-        'contents': 'joda_core.serializers.ContentSerializer'
+        'contents': 'joda_core.content.serializers.ContentSimpleSerializer'
     }
     contents = relations.ResourceRelatedField(
         source='content_set', many=True, read_only=True)
@@ -21,7 +21,7 @@ class FileSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if not user.is_authenticated and not instance.public:
             f = FileProtectedSerializer(instance, context=self.context).to_representation(instance)
-            f['content'] = []
+            f['contents'] = []
             return f
         return super(FileSerializer, self).to_representation(instance)
 
