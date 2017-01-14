@@ -7,18 +7,21 @@ from joda_core.models import Tag
 from joda_core.files.models import File
 
 
-class Content(PolymorphicModel):
+class Document(PolymorphicModel):
     title = models.CharField(max_length=255)
     files = models.ManyToManyField(File)
-    added = models.DateTimeField(auto_now_add=True)
     verified = models.BooleanField(default=False)
     public = models.BooleanField(default=False)
-    user = models.ForeignKey(
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        User, null=True, on_delete=models.SET_NULL, related_name='+')
+    changed_at = models.DateTimeField(auto_now_add=True)
+    changed_by = models.ForeignKey(
         User, null=True, on_delete=models.SET_NULL, related_name='+')
     tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return self.title
 
-    def get_content_type(self):
+    def get_document_type(self):
         return ContentType.objects.get_for_id(self.polymorphic_ctype_id)

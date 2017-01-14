@@ -47,12 +47,12 @@ def get_file_view(request, file_id):
         return HttpResponse(status=404)
 
     # Generate and return the response
-    content_type = file_info.content_type()
+    mime_type = file_info.mime_type()
     render_type = 'inline' if inline else 'attachment'
     file_output = file_info.name
 
     with open(file_name, 'rb') as f:
-        r = HttpResponse(f.read(), content_type=content_type)
+        r = HttpResponse(f.read(), document_type=mime_type)
         r['Content-Disposition'] = render_type + ';filename=' + file_output
         return r
 
@@ -69,21 +69,21 @@ class FilesViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
-            return File.objects.filter(public=True).annotate(Count('content')).order_by('-pk')
-        return File.objects.annotate(Count('content')).order_by('-pk')
+            return File.objects.filter(public=True).annotate(Count('document')).order_by('-pk')
+        return File.objects.annotate(Count('document')).order_by('-pk')
 
-    def create_child_resource(self, resource_type, file):
-        if resource_type == 'null':
+    def create_child(self, document_type, file):
+        if document_type == 'null':
             return
 
-        if resource_type not in settings.JODA_FEATURES and \
-            'joda_' + resource_type not in settings.JODA_FEATURES:
+        if document_type not in settings.JODA_FEATURES and \
+            'joda_' + document_type not in settings.JODA_FEATURES:
             return
 
-        if not 'joda_' in resource_type:
-            resource_type = 'joda_' + resource_type
+        if not 'joda_' in document_type:
+            document_type = 'joda_' + document_type
 
-        module = importlib.import_module('.helpers', resource_type)
+        module = importlib.import_module('.helpers', document_type)
         module.create_from_upload(file, self.request.user)
 
     def create(self, request, *args, **kwargs):
@@ -99,7 +99,7 @@ class FilesViewSet(viewsets.ModelViewSet):
                     'type': 'User',
                     'id': self.request.user.id
                 },
-                'content_set': {}
+                'document_set': {}
             })
 
         serializer = self.get_serializer(data=result, many=True)
@@ -109,9 +109,9 @@ class FilesViewSet(viewsets.ModelViewSet):
         return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        resource_type = self.request.data.get('resource_type')
+        document_type = self.request.data.get('document_type')
 
         result = serializer.save()
 
         for r in result:
-            self.create_child_resource(resource_type, r)
+            self.create_child(document_type, r)

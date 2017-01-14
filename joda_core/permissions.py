@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 
 class IsPublic(permissions.BasePermission):
-    """Common permission which checks that content is public"""
+    """Common permission which checks that document is public"""
 
     def has_object_permission(self, request, view, obj):
         if not obj.public:

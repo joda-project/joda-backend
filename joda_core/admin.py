@@ -10,7 +10,7 @@ class CommonCoreAdmin(admin.ModelAdmin):
 
 class FilesAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
-    list_filter = ['added', 'file_type']
+    list_filter = ['created_at', 'file_type']
     search_fields = ['name', 'label']
 
 

@@ -22,9 +22,12 @@ class File(models.Model):
     file_type = models.CharField(max_length=5,
                                  choices=FileType.choices,
                                  validators=[FileType.validator])
-    added = models.DateTimeField(auto_now_add=True)
     public = models.BooleanField(default=False)
-    user = models.ForeignKey(
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        User, null=True, on_delete=models.SET_NULL, related_name='+')
+    changed_at = models.DateTimeField(auto_now_add=True)
+    changed_by = models.ForeignKey(
         User, null=True, on_delete=models.SET_NULL, related_name='+')
     label = models.CharField(max_length=255, blank=True)
 
@@ -32,8 +35,8 @@ class File(models.Model):
         """ String representation of file is a the name """
         return self.name
 
-    def content_type(self):
-        """ File content mime type """
+    def mime_type(self):
+        """ File mime type """
         if self.file_type == File.FileType.PDF:
             return 'application/pdf'
         elif self.file_type == File.FileType.PNG:

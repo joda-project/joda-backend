@@ -2,13 +2,13 @@ from rest_framework import filters, permissions, viewsets
 
 from joda_core.pagination import DefaultPagination
 from joda_core.permissions import IsPublic
-from joda_core.content.models import Content
-from joda_core.content.serializers import ContentSerializer
+from joda_core.documents.models import Document
+from joda_core.documents.serializers import DocumentSerializer
 
 
-class ContentsViewSet(viewsets.ModelViewSet):
+class DocumentsViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsPublic)
-    serializer_class = ContentSerializer
+    serializer_class = DocumentSerializer
     pagination_class = DefaultPagination
     filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter)
     filter_fields = ('tags', 'public', 'verified')
@@ -16,5 +16,5 @@ class ContentsViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
-            return Content.objects.filter(public=True).order_by('-pk')
-        return Content.objects.order_by('-pk')
+            return Document.objects.filter(public=True).order_by('-pk')
+        return Document.objects.order_by('-pk')
