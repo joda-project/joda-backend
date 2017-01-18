@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from polymorphic.models import PolymorphicModel
@@ -14,10 +14,10 @@ class Document(PolymorphicModel):
     public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        User, null=True, on_delete=models.SET_NULL, related_name='+')
+        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='+')
     changed_at = models.DateTimeField(auto_now_add=True)
     changed_by = models.ForeignKey(
-        User, null=True, on_delete=models.SET_NULL, related_name='+')
+        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='+')
     tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):

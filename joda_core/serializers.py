@@ -1,7 +1,6 @@
-from django.contrib.auth.models import User
 from rest_framework_json_api import serializers
 
-from joda_core.models import Author, Tag
+from joda_core.models import Author, User, Tag
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -22,4 +21,5 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
+        resource_name = "users"
         fields = ('id', 'username', 'first_name', 'last_name')

@@ -42,14 +42,14 @@ def get_file_view(request, file_id):
         return HttpResponse(status=401)
 
     # If file is missing, this is an error, but we should still return 404
-    file_name = os.path.join(utils.upload_path(), file_info.name)
+    file_name = os.path.join(utils.upload_path(), file_info.__str__())
     if not file_name or not os.path.exists(file_name):
         return HttpResponse(status=404)
 
     # Generate and return the response
     mime_type = file_info.mime_type()
     render_type = 'inline' if inline else 'attachment'
-    file_output = file_info.name
+    file_output = file_info.__str__()
 
     with open(file_name, 'rb') as f:
         r = HttpResponse(f.read(), document_type=mime_type)
@@ -89,12 +89,12 @@ class FilesViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         result = []
         for f, t in zip(self.request.FILES.getlist('file[]'), self.request.data.get('file_types').split(',')):
-            file_name, file_md5, file_size = utils.handle_uploaded_file(f)
+            file_md5, file_created_at, file_size = utils.handle_uploaded_file(f, t)
             result.append({
-                'name': file_name,
                 'file_type': t,
                 'md5': file_md5,
                 'size': file_size,
+                'created_at': file_created_at,
                 'user': {
                     'type': 'User',
                     'id': self.request.user.id

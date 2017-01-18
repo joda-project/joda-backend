@@ -14,6 +14,7 @@ class FileSerializer(serializers.ModelSerializer):
     included_serializers = {
         'documents': 'joda_core.documents.serializers.DocumentSimpleSerializer'
     }
+    name = serializers.CharField(source='__str__', read_only=True)
     documents = relations.ResourceRelatedField(
         source='document_set', many=True, read_only=True)
 

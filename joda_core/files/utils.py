@@ -1,11 +1,12 @@
 import hashlib
 import os
 import sys
-import time
 
+from datetime import datetime
 from django.utils.lru_cache import lru_cache
-
 from rest_framework import exceptions, status
+
+from joda_core.files.models import File
 
 
 @lru_cache()
@@ -19,36 +20,11 @@ class FileIOException(exceptions.APIException):
     default_code = 'file_io'
 
 
-def sanitize_name(string):
-    return ''.join(c for c in string if c.isalnum() or c in '.-_').strip()
-
-
-def get_unique_name(name):
-    if not name:
-        name = 'upload-{}.pdf'.format(int(time.time()))
-
-    prefix, extension = os.path.splitext(name)
-    if not extension:
-        extension = '.pdf'
-
-    path = upload_path()
-    name = sanitize_name(prefix + extension.lower())
-    fullname = os.path.join(path, name)
-    index = 1
-    while os.path.exists(fullname):
-        name = prefix + '-' + str(index) + extension.lower()
-        fullname = os.path.join(path, name)
-        index = index + 1
-    return name
-
-
-def get_md5(name):
-    path = upload_path()
+def get_md5(file):
     hash_md5 = hashlib.md5()
     try:
-        with open(os.path.join(path, name), "rb") as f:
-            for chunk in iter(lambda: f.read(4096), b""):
-                hash_md5.update(chunk)
+        for chunk in iter(lambda: file.read(4096), b""):
+            hash_md5.update(chunk)
     except IOError as exception:
         print(exception, file=sys.stderr)
         raise FileIOException
@@ -61,8 +37,11 @@ def get_size(name):
     return statinfo.st_size
 
 
-def handle_uploaded_file(file):
-    name = get_unique_name(file.name)
+def handle_uploaded_file(file, file_type):
+    created_at = datetime.now()
+    md5 = get_md5(file)
+    name = md5 + '_' + str(int(created_at.timestamp())) + File.get_extension(file_type)
+
     path = upload_path()
     try:
         with open(os.path.join(path, name), 'wb+') as destination:
@@ -72,6 +51,6 @@ def handle_uploaded_file(file):
         print(exception, file=sys.stderr)
         raise FileIOException
 
-    md5 = get_md5(name)
     size = get_size(name)
-    return name, md5, size
+
+    return md5, created_at, size
