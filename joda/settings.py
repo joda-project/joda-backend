@@ -118,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+AUTH_USER_MODEL = 'joda_core.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
