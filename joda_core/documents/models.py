@@ -19,6 +19,7 @@ class Document(PolymorphicModel):
     changed_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='+')
     tags = models.ManyToManyField(Tag, blank=True)
+    notes = models.TextField(default='')
 
     def __str__(self):
         return self.title
