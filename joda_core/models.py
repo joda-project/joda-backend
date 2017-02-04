@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    avatar = models.CharField(max_length=255, blank=True)
+    remote_avatar = models.BooleanField(default=False)
 
 
 class Author(models.Model):
