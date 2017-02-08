@@ -14,12 +14,17 @@ class Document(PolymorphicModel):
     public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='+')
-    changed_at = models.DateTimeField(auto_now_add=True)
+        settings.AUTH_USER_MODEL, null=True, editable=False,
+        on_delete=models.SET_NULL, related_name='+')
+    changed_at = models.DateTimeField(auto_now=True)
     changed_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='+')
+        settings.AUTH_USER_MODEL, null=True, editable=False,
+        on_delete=models.SET_NULL, related_name='+')
     tags = models.ManyToManyField(Tag, blank=True)
     notes = models.TextField(default='', blank=True)
+
+    class JSONAPIMeta:
+        resource_name = 'documents'
 
     def __str__(self):
         return self.title

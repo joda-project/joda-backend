@@ -9,7 +9,6 @@ class DocumentAbstractSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Document
-        resource_name = 'documents'
 
 
 class DocumentSimpleSerializer(DocumentAbstractSerializer):
@@ -24,4 +23,4 @@ class DocumentSerializer(DocumentAbstractSerializer):
     }
 
     class Meta(DocumentAbstractSerializer.Meta):
-        exclude = ('polymorphic_ctype',)
+        exclude = ('polymorphic_ctype', 'changed_by', 'changed_at')

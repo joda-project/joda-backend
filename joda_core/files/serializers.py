@@ -6,7 +6,6 @@ from joda_core.files.models import File
 class FileProtectedSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        resource_name = 'files'
         fields = ('public',)
 
 
@@ -28,6 +27,4 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        resource_name = 'files'
-        fields = ('name', 'md5', 'size', 'file_type',
-                  'created_at', 'public', 'label', 'documents')
+        exclude = ('created_by', 'changed_by')

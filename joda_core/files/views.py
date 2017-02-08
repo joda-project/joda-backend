@@ -87,31 +87,18 @@ class FilesViewSet(viewsets.ModelViewSet):
         module.create_from_upload(file, self.request.user)
 
     def create(self, request, *args, **kwargs):
+        document_type = self.request.data.get('document_type')
         result = []
         for f, t in zip(self.request.FILES.getlist('file[]'), self.request.data.get('file_types').split(',')):
-            file_md5, file_created_at, file_size = utils.handle_uploaded_file(f, t)
-            result.append({
-                'file_type': t,
-                'md5': file_md5,
-                'size': file_size,
-                'created_at': file_created_at,
-                'user': {
-                    'type': 'User',
-                    'id': self.request.user.id
-                },
-                'document_set': {}
-            })
+            file_md5, file_size = utils.handle_uploaded_file(f, t)
+            new_file = File(file_type=t, md5=file_md5, size=file_size)
+            new_file.save()
+            result.append(new_file)
+            self.create_child(document_type, new_file)
 
-        serializer = self.get_serializer(data=result, many=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        serializer = self.get_serializer(result, many=True)
         headers = self.get_success_headers(serializer.data)
         return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    def perform_create(self, serializer):
-        document_type = self.request.data.get('document_type')
-
-        result = serializer.save()
-
-        for r in result:
-            self.create_child(document_type, r)
+    def perform_update(self, serializer):
+        serializer.save(changed_by=self.request.user)

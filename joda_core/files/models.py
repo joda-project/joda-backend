@@ -10,25 +10,32 @@ from djchoices import DjangoChoices, ChoiceItem
 class File(models.Model):
     """ File model """
     class FileType(DjangoChoices):
-        # pylint: disable = R0903, W0232
+        # pylint: disable = W0232
         """ File type definitions """
         PDF = ChoiceItem()
         JPEG = ChoiceItem()
         PNG = ChoiceItem()
 
-    md5 = models.CharField(max_length=32)
-    size = models.IntegerField()
+    md5 = models.CharField(max_length=32, editable=False)
+    size = models.IntegerField(editable=False)
     file_type = models.CharField(max_length=5,
                                  choices=FileType.choices,
-                                 validators=[FileType.validator])
+                                 validators=[FileType.validator],
+                                 editable=False)
     public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='+')
-    changed_at = models.DateTimeField(auto_now_add=True)
+        settings.AUTH_USER_MODEL, null=True, editable=False,
+        on_delete=models.SET_NULL, related_name='+')
+    changed_at = models.DateTimeField(auto_now=True)
     changed_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='+')
+        settings.AUTH_USER_MODEL, null=True, editable=False,
+        on_delete=models.SET_NULL, related_name='+')
     label = models.CharField(max_length=255, blank=True)
+
+    class JSONAPIMeta:
+        """ JSON API meta information """
+        resource_name = 'files'
 
     def __str__(self):
         """ String representation of file is a the name """

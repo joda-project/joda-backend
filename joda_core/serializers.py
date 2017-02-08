@@ -21,5 +21,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        resource_name = "users"
         fields = ('id', 'username', 'first_name', 'last_name')

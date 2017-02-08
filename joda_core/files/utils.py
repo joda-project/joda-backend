@@ -38,9 +38,8 @@ def get_size(name):
 
 
 def handle_uploaded_file(file, file_type):
-    created_at = datetime.now()
     md5 = get_md5(file)
-    name = md5 + '_' + str(int(created_at.timestamp())) + File.get_extension(file_type)
+    name = md5 + '_' + str(int(datetime.now().timestamp())) + File.get_extension(file_type)
 
     path = upload_path()
     try:
@@ -53,4 +52,4 @@ def handle_uploaded_file(file, file_type):
 
     size = get_size(name)
 
-    return md5, created_at, size
+    return md5, size
