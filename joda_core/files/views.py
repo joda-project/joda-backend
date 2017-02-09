@@ -91,7 +91,7 @@ class FilesViewSet(viewsets.ModelViewSet):
         result = []
         for f, t in zip(self.request.FILES.getlist('file[]'), self.request.data.get('file_types').split(',')):
             file_md5, file_size = utils.handle_uploaded_file(f, t)
-            new_file = File(file_type=t, md5=file_md5, size=file_size)
+            new_file = File(file_type=t, md5=file_md5, size=file_size, created_by=self.request.user)
             new_file.save()
             result.append(new_file)
             self.create_child(document_type, new_file)

@@ -27,4 +27,4 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        exclude = ('created_by', 'changed_by')
+        exclude = ('changed_at', 'changed_by')

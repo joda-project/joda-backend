@@ -7,6 +7,9 @@ class Section(models.Model):
     def __str__(self):
         return self.name
 
+    class JSONAPIMeta:
+        resource_name = 'sections'
+
 
 class UserGroup(models.Model):
     name = models.CharField(max_length=255)
@@ -17,3 +20,6 @@ class UserGroup(models.Model):
 
     def __str__(self):
         return self.name
+
+    class JSONAPIMeta:
+        resource_name = 'user-groups'

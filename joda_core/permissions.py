@@ -8,3 +8,17 @@ class IsPublic(permissions.BasePermission):
         if not obj.public:
             return request.user.is_authenticated
         return True
+
+
+class UserPermission(permissions.BasePermission):
+    """Users permissions"""
+
+    def has_permission(self, request, view):
+        if request.method in ['POST', 'DELETE']:
+            return False
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in ['PUT', 'PATCH']:
+            return obj == request.user
+        return True

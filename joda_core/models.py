@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from joda_core.organization.models import Section, UserGroup
+
 
 class User(AbstractUser):
+    user_groups = models.ManyToManyField(UserGroup)
     remote_avatar = models.BooleanField(default=False)
 
     class JSONAPIMeta:
