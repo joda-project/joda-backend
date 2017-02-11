@@ -1,9 +1,11 @@
+import base64
 import importlib
 import os
 
 from django.conf import settings
 from django.db.models import Count
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import filters, permissions, response, status, viewsets
 
 from joda_core.pagination import DefaultPagination
@@ -14,6 +16,7 @@ from joda_core.files.models import File
 from joda_core.files.serializers import FileSerializer
 
 
+@csrf_exempt
 def get_file_view(request, file_id):
     """Get file view
 
@@ -30,7 +33,7 @@ def get_file_view(request, file_id):
                       404 if file missing
     """
 
-    inline = 'inline' in request.GET and request.GET['inline']
+    inline = 'inline' in request.POST and request.POST['inline']
     file_info = File.objects.get(id=int(file_id))
 
     # File with this index does not exist
@@ -48,13 +51,17 @@ def get_file_view(request, file_id):
 
     # Generate and return the response
     mime_type = file_info.mime_type()
-    render_type = 'inline' if inline else 'attachment'
     file_output = file_info.__str__()
 
     with open(file_name, 'rb') as f:
-        r = HttpResponse(f.read(), document_type=mime_type)
-        r['Content-Disposition'] = render_type + ';filename=' + file_output
-        return r
+        if inline:
+            encoded_file = base64.b64encode(f.read())
+            r = HttpResponse(encoded_file)
+            return r
+        else:
+            r = HttpResponse(f.read(), content_type=mime_type)
+            r['Content-Disposition'] = 'attachment' + ';filename=' + file_output
+            return r
 
     return HttpResponse(status=500)
 

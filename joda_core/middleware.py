@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.utils.cache import patch_vary_headers
 
 
-class OAuth2TokenMiddleware(object):  # pylint: disable=too-few-public-methods
+class OAuth2TokenMiddleware(object):
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -13,9 +13,9 @@ class OAuth2TokenMiddleware(object):  # pylint: disable=too-few-public-methods
 
         if request.META.get('HTTP_AUTHORIZATION', '').startswith('Bearer'):
             oauth = True
-        elif 'token' in request.GET or 'token' in request.POST:
+        elif 'token' in request.POST:
             try:
-                token = b64decode(request.GET['token']).decode().split(':')
+                token = b64decode(request.POST['token']).decode().split(':')
                 if token[0] == request.path:
                     request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + token[1]
                     oauth = True
