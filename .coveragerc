@@ -1,0 +1,8 @@
+[run]
+branch = True
+source =
+  joda
+  joda_core
+omit =
+  joda/settings_devel.py
+  joda_core/migrations/*

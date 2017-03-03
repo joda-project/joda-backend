@@ -1,5 +1,7 @@
 __pycache__
+/htmlcov
 /venv
+.coverage
 .env
 migrations
 settings_*.py
