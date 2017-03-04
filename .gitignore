@@ -4,4 +4,3 @@ __pycache__
 .coverage
 .env
 migrations
-settings_*.py
