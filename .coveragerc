@@ -5,4 +5,6 @@ source =
   joda_core
 omit =
   joda/settings_devel.py
+  joda/tests.py
   joda_core/migrations/*
+  joda_core/tests/*

@@ -9,6 +9,7 @@ before_install:
 
 install:
   - pip install -r requirements.txt
+  - pip install git+https://github.com/joda-project/joda-backend-misc.git
 
 script:
   - coverage run manage.py test
