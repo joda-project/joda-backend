@@ -6,3 +6,4 @@ class FilesAdmin(admin.ModelAdmin):
                     'created_by', 'changed_at', 'changed_by')
     list_filter = ['file_type', 'created_at', 'changed_at']
     search_fields = ['__str__', 'label']
+    filter_horizontal = ['sections']

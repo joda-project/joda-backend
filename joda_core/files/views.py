@@ -1,19 +1,20 @@
 import base64
-import importlib
 import os
 
-from django.conf import settings
+from django.apps import apps
 from django.db.models import Count
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import filters, permissions, response, status, viewsets
 
+from joda.helpers import features
 from joda_core.pagination import DefaultPagination
 from joda_core.permissions import IsPublic
 from joda_core.files import utils
 from joda_core.files.filters import FilesFilterSet
 from joda_core.files.models import File
 from joda_core.files.serializers import FileSerializer
+from joda_core.organization.models import Section
 
 
 @csrf_exempt
@@ -83,23 +84,33 @@ class FilesViewSet(viewsets.ModelViewSet):
         if document_type == 'null':
             return
 
-        if document_type not in settings.JODA_FEATURES and \
-            'joda_' + document_type not in settings.JODA_FEATURES:
+        features_dict = features()
+        if document_type not in features_dict:
             return
 
-        if not 'joda_' in document_type:
-            document_type = 'joda_' + document_type
+        feature = features_dict[document_type]
 
-        module = importlib.import_module('.helpers', document_type)
-        module.create_from_upload(file, self.request.user)
+        DocumentModel = apps.get_model(
+            app_label=feature['module'], model_name=feature['model_name'])
+        document = DocumentModel(
+            title=feature['new_item_str'], created_by=self.request.user)
+        document.save()
+        document.sections.add(file.sections.first())
+        document.files.add(file)
+        document.save()
+        return document
 
     def create(self, request, *args, **kwargs):
         document_type = self.request.data.get('document_type')
+        section = Section.objects.order_by('pk').first()
         result = []
-        for f, t in zip(self.request.FILES.getlist('file[]'), self.request.data.get('file_types').split(',')):
+        for f, t in zip(self.request.FILES.getlist('file[]'),
+                        self.request.data.get('file_types').split(',')):
             file_md5, file_size = utils.handle_uploaded_file(f, t)
-            new_file = File(file_type=t, md5=file_md5, size=file_size, created_by=self.request.user)
+            new_file = File(file_type=t, md5=file_md5,
+                            size=file_size, created_by=self.request.user)
             new_file.save()
+            new_file.sections.add(section)
             result.append(new_file)
             self.create_child(document_type, new_file)
 

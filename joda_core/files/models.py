@@ -1,10 +1,11 @@
-
 """
 File model definition
 """
 from django.conf import settings
 from django.db import models
 from djchoices import DjangoChoices, ChoiceItem
+
+from joda_core.organization.models import Section
 
 
 class File(models.Model):
@@ -16,6 +17,7 @@ class File(models.Model):
         JPEG = ChoiceItem()
         PNG = ChoiceItem()
 
+    sections = models.ManyToManyField(Section, blank=False)
     md5 = models.CharField(max_length=32, editable=False)
     size = models.IntegerField(editable=False)
     file_type = models.CharField(max_length=5,

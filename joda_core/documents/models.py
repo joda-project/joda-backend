@@ -5,10 +5,12 @@ from polymorphic.models import PolymorphicModel
 
 from joda_core.models import Tag
 from joda_core.files.models import File
+from joda_core.organization.models import Section
 
 
 class Document(PolymorphicModel):
     title = models.CharField(max_length=255)
+    sections = models.ManyToManyField(Section, blank=False)
     files = models.ManyToManyField(File)
     verified = models.BooleanField(default=False)
     public = models.BooleanField(default=False)
