@@ -7,19 +7,46 @@ from django.utils.lru_cache import lru_cache
 
 
 @lru_cache()
-def get_version(path=None, no_revision=False):
-    """Returns a version string from VERSION and git."""
-    base_dir = path if path else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    with open(os.path.join(base_dir, 'VERSION')) as version_file:
-        version = version_file.read().strip()
+def get_version(version, path=None):
+    """Return a PEP 440-compliant version number from VERSION and git."""
+    version = get_complete_version(version)
 
-    if no_revision:
-        return version
+    # Now build the two parts of the version number:
+    # main = X.Y.Z
+    # sub = +rev - for git revisions
+    #     | {a|b|rc}N - for alpha, beta, and rc releases
 
-    revision = get_git_changeset(path)
+    main = get_main_version(version)
 
-    if revision:
-        version += '+' + revision
+    sub = ''
+    if path:
+        git_changeset = get_git_changeset(path)
+        if git_changeset:
+            sub = '+%s' % git_changeset
+
+    elif version[3] != 'final' and version[4] != 0:
+        mapping = {'alpha': 'a', 'beta': 'b', 'rc': 'rc'}
+        sub = mapping[version[3]] + str(version[4])
+
+    return main + sub
+
+
+def get_main_version(version=None):
+    """Return main version (X.Y.Z) from VERSION."""
+    version = get_complete_version(version)
+    return '.'.join(str(x) for x in version[:3])
+
+
+def get_complete_version(version=None):
+    """
+    Return a tuple of the version. If version argument is non-empty,
+    check for correctness of the tuple provided.
+    """
+    if version is None:
+        from joda import VERSION as version
+    else:
+        assert len(version) == 5
+        assert version[3] in ('alpha', 'beta', 'rc', 'final')
 
     return version
 

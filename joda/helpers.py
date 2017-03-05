@@ -6,6 +6,7 @@ from django.utils.lru_cache import lru_cache
 from rest_framework import permissions, response, routers
 from rest_framework.decorators import api_view, permission_classes
 
+from joda import version_string
 from joda.version import get_version
 from joda_core.router import router as core
 
@@ -23,7 +24,7 @@ def features():
         module = importlib.import_module(module_name)
         features_dict[feature] = {
             'module': module_name,
-            'version': module.version,
+            'version': get_version(module.VERSION, module.module_path),
             'model_name': module.model_name,
             'item_name': module.item_name,
             'item_group': module.item_group
@@ -37,7 +38,7 @@ def features():
 def about_view(_):
     """Simple about API view"""
     out = {
-        'version': get_version(),
+        'version': version_string,
         'features': {}
     }
 
@@ -64,5 +65,6 @@ class JodaRouter(routers.DefaultRouter):
 
         features_dict = features()
         for feature in features_dict:
-            module = importlib.import_module('.router', features_dict[feature]['module'])
+            module = importlib.import_module(
+                '.router', features_dict[feature]['module'])
             self.extend(module.router)
