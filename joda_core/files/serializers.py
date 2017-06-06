@@ -21,6 +21,8 @@ class FileSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if not user.is_authenticated and not instance.public:
             f = FileProtectedSerializer(instance, context=self.context).to_representation(instance)
+            f['created_by'] = []
+            f['sections'] = []
             f['documents'] = []
             return f
         return super(FileSerializer, self).to_representation(instance)
