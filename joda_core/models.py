@@ -1,3 +1,6 @@
+from urllib.parse import urlencode
+from hashlib import md5
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -10,6 +13,12 @@ class User(AbstractUser):
 
     class JSONAPIMeta:
         resource_name = 'users'
+
+    def generate_gravatar(self):
+        if not self.remote_avatar:
+            return ''
+
+        return 'https://www.gravatar.com/avatar/' + md5(self.email.lower().encode('utf-8')).hexdigest() + '?' + urlencode({'s': ''})
 
 
 class Author(models.Model):
