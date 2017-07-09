@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'is_staff',
-                  'user_groups', 'remote_avatar', 'gravatar')
+                  'user_groups', 'locale', 'remote_avatar', 'gravatar')
 
 
 class SectionSerializer(serializers.ModelSerializer):

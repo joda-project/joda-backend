@@ -11,6 +11,8 @@ from joda_core.organization.models import Section, UserGroup
 class User(AbstractUser):
     user_groups = models.ManyToManyField(
         UserGroup, verbose_name=_('user groups'))
+    locale = models.CharField(
+        max_length=5, default='en', verbose_name=_('locale'))
     remote_avatar = models.BooleanField(
         default=False, verbose_name=_('Gravatar'))
 

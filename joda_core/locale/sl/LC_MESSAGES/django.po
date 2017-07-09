@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-09 19:15+0200\n"
+"POT-Creation-Date: 2017-07-09 19:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,97 +35,101 @@ msgstr "Skupno"
 msgid "title"
 msgstr "naslov"
 
-#: joda_core/documents/models.py:14 joda_core/files/models.py:21
+#: joda_core/documents/models.py:15 joda_core/files/models.py:22
 #: joda_core/organization/models.py:13
 msgid "sections"
 msgstr "razdelki"
 
-#: joda_core/documents/models.py:15 joda_core/files/models.py:42
+#: joda_core/documents/models.py:16 joda_core/files/models.py:48
 msgid "files"
 msgstr "datoteke"
 
-#: joda_core/documents/models.py:16
+#: joda_core/documents/models.py:17
 msgid "verified"
 msgstr "preverjeno"
 
-#: joda_core/documents/models.py:17 joda_core/files/models.py:29
+#: joda_core/documents/models.py:19 joda_core/files/models.py:32
 msgid "publicly visible"
 msgstr "javno vidno"
 
-#: joda_core/documents/models.py:18 joda_core/files/models.py:30
+#: joda_core/documents/models.py:21 joda_core/files/models.py:34
 msgid "created at"
 msgstr "ustvarjeno"
 
-#: joda_core/documents/models.py:21 joda_core/files/models.py:33
+#: joda_core/documents/models.py:24 joda_core/files/models.py:37
 msgid "created by"
 msgstr "avtor"
 
-#: joda_core/documents/models.py:22 joda_core/files/models.py:34
+#: joda_core/documents/models.py:26 joda_core/files/models.py:39
 msgid "changed at"
 msgstr "spremenjeno"
 
-#: joda_core/documents/models.py:25 joda_core/files/models.py:37
+#: joda_core/documents/models.py:29 joda_core/files/models.py:42
 msgid "changed by"
 msgstr "spremenil"
 
-#: joda_core/documents/models.py:26 joda_core/models.py:47
+#: joda_core/documents/models.py:30 joda_core/models.py:50
 msgid "tags"
 msgstr "oznake"
 
-#: joda_core/documents/models.py:27
+#: joda_core/documents/models.py:31
 msgid "notes"
 msgstr "zabeležke"
 
-#: joda_core/documents/models.py:30
+#: joda_core/documents/models.py:34
 msgid "document"
 msgstr "dokument"
 
-#: joda_core/documents/models.py:31
+#: joda_core/documents/models.py:35
 msgid "documents"
 msgstr "dokumenti"
 
-#: joda_core/files/models.py:22
+#: joda_core/files/models.py:24
 msgid "MD5"
 msgstr "MD5"
 
-#: joda_core/files/models.py:23
+#: joda_core/files/models.py:25
 msgid "size"
 msgstr "velikost"
 
-#: joda_core/files/models.py:28
+#: joda_core/files/models.py:30
 msgid "file type"
 msgstr "tip datoteke"
 
-#: joda_core/files/models.py:38
+#: joda_core/files/models.py:44
 msgid "label"
 msgstr "oznaka"
 
-#: joda_core/files/models.py:41
+#: joda_core/files/models.py:47
 msgid "file"
 msgstr "datoteka"
 
-#: joda_core/models.py:12 joda_core/organization/models.py:31
+#: joda_core/models.py:13 joda_core/organization/models.py:31
 msgid "user groups"
 msgstr "uporabniške skupine"
 
-#: joda_core/models.py:13
+#: joda_core/models.py:14
+msgid "locale"
+msgstr "jezik"
+
+#: joda_core/models.py:16
 msgid "Gravatar"
 msgstr "Gravatar"
 
-#: joda_core/models.py:26 joda_core/organization/models.py:6
+#: joda_core/models.py:29 joda_core/organization/models.py:6
 #: joda_core/organization/models.py:20
 msgid "name"
 msgstr "ime"
 
-#: joda_core/models.py:32
+#: joda_core/models.py:35
 msgid "author"
 msgstr "avtor"
 
-#: joda_core/models.py:33
+#: joda_core/models.py:36
 msgid "authors"
 msgstr "avtorji"
 
-#: joda_core/models.py:46
+#: joda_core/models.py:49
 msgid "tag"
 msgstr "oznaka"
 

@@ -17,6 +17,9 @@ class LocaleMiddleware(object):
 
     def __call__(self, request):
         language = ''
+        if request.user and request.user.is_authenticated:
+            language = request.user.locale
+
         if not language:
             language = settings.LANGUAGE_CODE
         translation.activate(language)
