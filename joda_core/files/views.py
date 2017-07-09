@@ -71,9 +71,10 @@ class FilesViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsPublic)
     serializer_class = FileSerializer
     pagination_class = DefaultPagination
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = FilesFilterSet
     search_fields = ('name', 'label')
+    ordering_fields = ('created_at')
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:

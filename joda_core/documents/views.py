@@ -10,9 +10,10 @@ class DocumentsViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsPublic)
     serializer_class = DocumentSerializer
     pagination_class = DefaultPagination
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_fields = ('tags', 'public', 'verified')
     search_fields = ('title', 'tags__name', 'notes')
+    ordering_fields = ('title', 'created_at')
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
