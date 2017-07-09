@@ -3,4 +3,5 @@ __pycache__
 /venv
 .coverage
 .env
+*.mo
 migrations
