@@ -4,7 +4,6 @@ Common Django settings for Joda Backend
 
 import os
 import dj_database_url
-from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +37,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'joda_core.middleware.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -125,7 +125,8 @@ AUTH_USER_MODEL = 'joda_core.User'
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 LANGUAGE_CODE = 'en-us'
 LANGUAGES = (
-    ('en', _('English')),
+    ('en', 'English'),
+    ('sl', 'Slovenian'),
 )
 
 TIME_ZONE = 'CET'

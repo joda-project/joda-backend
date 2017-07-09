@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from django.utils.translation import ugettext_lazy as _
 
 from joda_core.files.admin import FilesAdmin
 from joda_core.files.models import File
@@ -20,3 +21,7 @@ admin.site.register(Section, SectionAdmin)
 admin.site.register(Tag, CommonCoreAdmin)
 admin.site.register(User, UsersAdmin)
 admin.site.register(UserGroup, UserGroupsAdmin)
+
+admin.site.site_header = _('Joda Administration')
+admin.site.site_title = _('Joda Administration')
+admin.site.index_title = _('Administration')

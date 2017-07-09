@@ -1,4 +1,5 @@
 from django.contrib import admin, messages
+from django.utils.translation import ugettext_lazy as _
 
 
 class SectionAdmin(admin.ModelAdmin):
@@ -14,7 +15,7 @@ class SectionAdmin(admin.ModelAdmin):
             queryset = queryset.exclude(pk__in=selected)
 
         if (selected or obj is not None) and queryset.count() <= 1:
-            message = 'The last section can not be deleted.'
+            message = _('The last section can not be deleted.')
             self.message_user(request, message, messages.INFO)
             return False
 

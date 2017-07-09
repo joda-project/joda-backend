@@ -1,6 +1,33 @@
 from base64 import b64decode
+from django.conf import settings
 from django.contrib.auth import authenticate
+from django.utils import translation
 from django.utils.cache import patch_vary_headers
+
+
+class LocaleMiddleware(object):
+    """
+    Parse a request and decide what translation object to install in the
+    current thread context. This allows pages to be dynamically translated to
+    the language the user desires (if the language is available, of course).
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        language = ''
+        if not language:
+            language = settings.LANGUAGE_CODE
+        translation.activate(language)
+        request.LANGUAGE_CODE = translation.get_language()
+
+        response = self.get_response(request)
+
+        patch_vary_headers(response, ('Accept-Language',))
+        if 'Content-Language' not in response:
+            response['Content-Language'] = language
+        return response
 
 
 class OAuth2TokenMiddleware(object):
