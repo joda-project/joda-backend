@@ -6,6 +6,7 @@ from django.db.models import Count
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import filters, permissions, response, status, viewsets
+from django_filters import rest_framework as django_filters
 
 from joda.helpers import features
 from joda_core.pagination import DefaultPagination
@@ -71,7 +72,7 @@ class FilesViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsPublic)
     serializer_class = FileSerializer
     pagination_class = DefaultPagination
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = FilesFilterSet
     search_fields = ('name', 'label')
     ordering_fields = ('created_at')
