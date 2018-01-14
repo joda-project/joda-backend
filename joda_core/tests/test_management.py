@@ -34,3 +34,32 @@ class OAuthCreateAppTestCase(TestCase):
         call_command('oauth_create_app', stdout=out)
 
         self.assertEqual(Application.objects.count(), 1)
+
+
+class OAuthDumpSecretTestCase(TestCase):
+    """oauth_dump_secret test case"""
+
+    def test_command_output(self):
+        """Test command output"""
+
+        exception = False
+        try:
+            call_command('oauth_dump_secret')
+        except CommandError:
+            exception = True
+        self.assertTrue(exception)
+
+        app = Application.objects.create(
+            id=1,
+            name='Joda Test',
+            skip_authorization=True,
+            client_id='test_id',
+            client_secret='test_secret',
+            client_type='confidential',
+            authorization_grant_type='password'
+        )
+        app.save()
+
+        out = StringIO()
+        call_command('oauth_dump_secret', stdout=out)
+        self.assertEqual('dGVzdF9pZDp0ZXN0X3NlY3JldA==', out.getvalue().strip())
