@@ -2,6 +2,7 @@ Django==1.11.9
   - pytz [required: Any, installed: 2017.3]
 djangorestframework==3.7.7
 appdirs==1.4.3
+astroid==1.5.3
 clint==0.5.1
 coverage==4.4.2
 dj-database-url==0.4.2
@@ -16,6 +17,7 @@ djangorestframework-jsonapi==2.3.1
 packaging==16.8
 pipdeptree==0.10.1
 psycopg2==2.7.3.2
+pylint==1.7.5
 pylint-django==0.7.2
 twine==1.9.1
 wheel==0.30.0
