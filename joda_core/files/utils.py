@@ -8,10 +8,12 @@ from rest_framework import exceptions, status
 
 from joda_core.files.models import File
 
+UPLOADS_KEY = 'JODA_UPLOADS_PATH'
+
 
 @lru_cache()
 def upload_path():
-    return os.environ['FILES_UPLOAD_PATH']
+    return os.environ[UPLOADS_KEY]
 
 
 class FileIOException(exceptions.APIException):

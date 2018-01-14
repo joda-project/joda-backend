@@ -8,7 +8,7 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ['JODA_SECRET_KEY']
 ALLOWED_HOSTS = []
 
 # Joda features
@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'joda.wsgi.application'
 
 # Parse database configuration from $DATABASE_URL
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': dj_database_url.config(env='DJANGO_DATABASE_URL')
 }
 
 
