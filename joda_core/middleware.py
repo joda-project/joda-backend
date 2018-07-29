@@ -52,7 +52,7 @@ class OAuth2TokenMiddleware(object):
             except:
                 pass
 
-        if oauth and (not hasattr(request, 'user') or request.user.is_anonymous()):
+        if oauth and (not hasattr(request, 'user') or request.user.is_anonymous):
             user = authenticate(request=request)
             if user:
                 request.user = request._cached_user = user

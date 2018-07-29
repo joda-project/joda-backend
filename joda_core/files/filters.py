@@ -5,7 +5,7 @@ from joda_core.files.models import File
 
 
 class FilesFilterSet(FilterSet):
-    document_count = NumberFilter(name="document__count")
+    document_count = NumberFilter(field_name="document__count")
 
     class Meta:
         model = File

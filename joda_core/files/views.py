@@ -72,9 +72,10 @@ class FilesViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsPublic)
     serializer_class = FileSerializer
     pagination_class = DefaultPagination
-    filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (django_filters.DjangoFilterBackend,
+                       filters.SearchFilter, filters.OrderingFilter)
     filter_class = FilesFilterSet
-    search_fields = ('name', 'label')
+    search_fields = ('md5', 'label')
     ordering_fields = ('created_at')
 
     def get_queryset(self):
